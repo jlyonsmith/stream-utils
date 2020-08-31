@@ -2,7 +2,7 @@
   "name": "@johnls/stream-utils",
   "version": "1.0.15",
   "description": "A collection of stream utilities",
-  "main": "index.js",
+  "main": "dist/index.js",
   "files": [
     "dist/**"
   ],
