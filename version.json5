@@ -10,10 +10,10 @@
   tags: {
     major: 1,
     minor: 0,
-    patch: 15,
+    patch: 16,
     build: 20200831,
     revision: 0,
-    sequence: 2,
+    sequence: 3,
     tz: 'America/Los_Angeles',
     title: 'Stream utilities',
     copyright: '© 2020, John Lyon-Smith',
