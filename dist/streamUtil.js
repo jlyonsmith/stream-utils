@@ -11,7 +11,7 @@ exports.pipeToPromise = pipeToPromise;
 var _stream = require("stream");
 
 function stringToStream(s) {
-  new _stream.Readable({
+  return new _stream.Readable({
     read() {
       this.push(s); // End of data
 
