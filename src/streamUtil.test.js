@@ -1,5 +1,10 @@
 import { Readable, Writable } from "stream"
-import { streamToBuffer, pipeToPromise, stringToStream } from "./streamUtil"
+import {
+  streamToBuffer,
+  pipeToPromise,
+  stringToStream,
+  streamToString,
+} from "./streamUtil"
 
 test("streamToBuffer", async () => {
   const s = "Hello World"
@@ -16,6 +21,19 @@ test("streamToBuffer", async () => {
   expect(result).toEqual(Buffer.from(s))
 })
 
+test("streamToString", async () => {
+  const s = "Brown Fox"
+  const testStream = new Readable({
+    read() {
+      this.push(s)
+      this.push(null)
+    },
+  })
+  const result = await streamToString(testStream)
+
+  expect(result).toBe(s)
+})
+
 test("pipeToPromise", async () => {
   const writable = new Writable({
     write(chunk, encoding, callback) {
@@ -24,7 +42,7 @@ test("pipeToPromise", async () => {
   })
 
   // The null push is required to end the nodesJS Stream
-  const readable = new Readable({
+  let readable = new Readable({
     read() {
       this.push("test")
       this.push(null)
@@ -32,6 +50,32 @@ test("pipeToPromise", async () => {
   })
 
   await expect(pipeToPromise(readable, writable)).resolves.toBeUndefined()
+
+  const errorReadable = new Readable({
+    read() {
+      this.destroy(new Error())
+    },
+  })
+
+  await expect(pipeToPromise(errorReadable, writable)).rejects.toBeInstanceOf(
+    Error
+  )
+
+  const errorWritable = new Writable({
+    write(chunk, encoding, callback) {
+      this.destroy(new Error())
+    },
+  })
+  readable = new Readable({
+    read() {
+      this.push("test")
+      this.push(null)
+    },
+  })
+
+  await expect(pipeToPromise(readable, errorWritable)).rejects.toBeInstanceOf(
+    Error
+  )
 })
 
 test("stringToStream", () => {

@@ -3,21 +3,24 @@
   "version": "1.0.16",
   "description": "A collection of stream utilities",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**"
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "babel src -d dist --source-maps --ignore **/*.test.js",
+    "build": "babel src -d dist -D types/index.d.ts --source-maps --ignore **/*.test.js",
     "test": "jest --coverage",
     "deploy": "npm publish --access public",
-    "show-coverage": "open coverage/lcov-report/index.html"
+    "show-coverage": "open coverage/lcov-report/index.html",
+    "lint": "dtslint types"
   },
   "jest": {
     "collectCoverage": true,
     "testPathIgnorePatterns": [
       "node_modules/",
-      "scratch/"
+      "scratch/",
+      "dist/"
     ]
   },
   "repository": {
@@ -45,5 +48,6 @@
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
     "jest-cli": "^26.0.1"
-  }
+  },
+  "dependencies": {}
 }
